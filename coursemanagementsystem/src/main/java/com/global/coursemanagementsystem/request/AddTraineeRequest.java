@@ -1,18 +1,18 @@
 package com.global.coursemanagementsystem.request;
 
-import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddingTrainerRequest {
-    private Integer trainerId;
+public class AddTraineeRequest {
+    private Long traineeId;
     private String firstName;
-    private String lastName;
+    private String lastName;   
     private String email;
-    private String expertise;
+    private String department;
+    private String role;
+
 }

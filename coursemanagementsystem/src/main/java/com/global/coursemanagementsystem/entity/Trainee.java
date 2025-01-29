@@ -21,10 +21,11 @@ public class Trainee {
     @Id
     @Column(name="trainee_id")
     private Long traineeId;
-    @Column(name = "first-name",nullable = false)
+    @Column(name = "first_name",nullable = false)
     private String firstName;
-    @Column(name = "last-name",nullable = false)
-    private String lastName;   
+    @Column(name = "last_name",nullable = false)
+    private String lastName; 
+    @Column(unique = true)  
     private String email;
     private String department;
     private String role;

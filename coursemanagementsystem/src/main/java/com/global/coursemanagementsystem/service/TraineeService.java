@@ -5,15 +5,16 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import com.global.coursemanagementsystem.entity.Trainee;
 import com.global.coursemanagementsystem.mapstruct.dto.TraineeDTO;
 import com.global.coursemanagementsystem.mapstruct.dto.TraineeDTO;
 import com.global.coursemanagementsystem.mapstruct.mapper.TraineeMapper;
 import com.global.coursemanagementsystem.reppository.TraineeRepository;
-import com.global.coursemanagementsystem.request.AddingTraineeRequest;
-import com.global.coursemanagementsystem.request.AddingTraineeRequest;
-
+import com.global.coursemanagementsystem.request.AddTraineeRequest;
+import com.global.coursemanagementsystem.request.AddTraineeRequest;
+@Service
 public class TraineeService {
 
     @Autowired
@@ -37,8 +38,8 @@ public class TraineeService {
         return traineeDto;
     }
 
-    public  TraineeDTO addTrainee(AddingTraineeRequest addingTraineeRequest) {
-        Trainee currentTrainee = traineeMapper.toEntity(addingTraineeRequest);
+    public  TraineeDTO addTrainee(AddTraineeRequest TraineeRequest) {
+        Trainee currentTrainee = traineeMapper.toEntity(TraineeRequest);
         Trainee traineeHavingSameEmail =traineeRepository.findByEmail(currentTrainee.getEmail()).orElse(null);
         if(traineeHavingSameEmail!=null) {
             return null;
@@ -63,9 +64,17 @@ public class TraineeService {
     }
 
     public TraineeDTO deleteTrainee(Long id) {
-        Trainee trainee = traineeRepository.findById(id).get();
-        traineeRepository.delete(trainee);
-        return traineeMapper.toDTO(trainee);
+      
+        Optional<Trainee> trainee = traineeRepository.findById(id);
+        Trainee TraineeToBeDeleted;
+        if (trainee.isPresent()) {
+            TraineeToBeDeleted=trainee.get();
+            traineeRepository.delete(TraineeToBeDeleted);
+        } else {
+            return null ;
+        }
+        
+        return traineeMapper.toDTO(TraineeToBeDeleted);
     }
 
 }

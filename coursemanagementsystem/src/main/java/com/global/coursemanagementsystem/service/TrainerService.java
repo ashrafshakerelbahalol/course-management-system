@@ -7,11 +7,12 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.global.coursemanagementsystem.entity.Trainee;
 import com.global.coursemanagementsystem.entity.Trainer;
 import com.global.coursemanagementsystem.mapstruct.dto.TrainerDTO;
 import com.global.coursemanagementsystem.mapstruct.mapper.TrainerMapper;
 import com.global.coursemanagementsystem.reppository.TrainerRepository;
-import com.global.coursemanagementsystem.request.AddingTrainerRequest;
+import com.global.coursemanagementsystem.request.AddTrainerRequest;
 
 @Service
 public class TrainerService {
@@ -36,10 +37,11 @@ public class TrainerService {
         return trainerDto;
     }
 
-    public  TrainerDTO addTrainer(AddingTrainerRequest addingTrainerRequest) {
-        Trainer currentTrainer = trainerMapper.toEntity(addingTrainerRequest);
+    public  TrainerDTO addTrainer(AddTrainerRequest TrainerRequest) {
+        Trainer currentTrainer = trainerMapper.toEntity(TrainerRequest);
+        Trainer trainerHavingSameId =trainerRepository.findById(currentTrainer.getTrainerId()).orElse(null);
         Trainer trainerHavingSameEmail =trainerRepository.findByEmail(currentTrainer.getEmail()).orElse(null);
-        if(trainerHavingSameEmail!=null) {
+        if(trainerHavingSameEmail!=null||trainerHavingSameId!=null) {
             return null;
         }
         currentTrainer = trainerRepository.save(currentTrainer);
@@ -62,9 +64,16 @@ public class TrainerService {
     }
 
     public TrainerDTO deleteTrainer(Integer id) {
-        Trainer trainer = trainerRepository.findById(id).get();
-        trainerRepository.delete(trainer);
-        return trainerMapper.toDTO(trainer);
+         Optional<Trainer> trainer = trainerRepository.findById(id);
+        Trainer TrainerToBeDeleted;
+        if (trainer.isPresent()) {
+            TrainerToBeDeleted=trainer.get();
+            trainerRepository.delete(TrainerToBeDeleted);
+        } else {
+            return null ;
+        }
+        
+        return trainerMapper.toDTO(TrainerToBeDeleted);
     }
 
 }

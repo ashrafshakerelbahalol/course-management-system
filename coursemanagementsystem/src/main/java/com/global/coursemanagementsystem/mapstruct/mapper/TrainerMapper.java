@@ -5,7 +5,7 @@ import org.mapstruct.factory.Mappers;
 
 import com.global.coursemanagementsystem.entity.Trainer;
 import com.global.coursemanagementsystem.mapstruct.dto.TrainerDTO;
-import com.global.coursemanagementsystem.request.AddingTrainerRequest;
+import com.global.coursemanagementsystem.request.AddTrainerRequest;
 
 @Mapper(componentModel = "spring")
 public interface TrainerMapper {
@@ -14,5 +14,5 @@ public interface TrainerMapper {
     TrainerMapper INSTANCE = Mappers.getMapper(TrainerMapper.class);
     TrainerDTO toDTO(Trainer trainer);
     Trainer toEntity(TrainerDTO trainerDTO);
-    Trainer toEntity(AddingTrainerRequest addingTrainerRequest);
+    Trainer toEntity(AddTrainerRequest TrainerRequest);
 }
