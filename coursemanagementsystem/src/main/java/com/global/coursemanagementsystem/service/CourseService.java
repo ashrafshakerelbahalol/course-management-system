@@ -9,16 +9,17 @@ import org.springframework.stereotype.Service;
 
 import com.global.coursemanagementsystem.entity.Course;
 import com.global.coursemanagementsystem.mapstruct.dto.CourseDTO;
-import com.global.coursemanagementsystem.mapstruct.dto.TrainerDTO;
 import com.global.coursemanagementsystem.mapstruct.mapper.CourseMapper;
 import com.global.coursemanagementsystem.reppository.CourseRepository;
 import com.global.coursemanagementsystem.request.AddCourseRequest;
 
+import lombok.RequiredArgsConstructor;
+
 @Service
+@RequiredArgsConstructor
 public class CourseService {
-    @Autowired
+
     private CourseRepository courseRepository;
-    @Autowired
     private CourseMapper courseMapper;
 
     public List<CourseDTO> getAllCourses() {

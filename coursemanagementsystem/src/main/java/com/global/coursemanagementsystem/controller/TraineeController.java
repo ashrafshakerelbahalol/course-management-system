@@ -13,15 +13,18 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.global.coursemanagementsystem.error.ResourceFoundException;
 import com.global.coursemanagementsystem.mapstruct.dto.TraineeDTO;
 import com.global.coursemanagementsystem.request.AddTraineeRequest;
 import com.global.coursemanagementsystem.response.ApiResponse;
 import com.global.coursemanagementsystem.service.TraineeService;
 
+import lombok.RequiredArgsConstructor;
+
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/trainee")
 public class TraineeController {
-    @Autowired
     private TraineeService traineeService;
 
     @GetMapping("/get-all-trainees")
@@ -41,9 +44,12 @@ public class TraineeController {
 
     @PostMapping("/add-trainee")
     public ResponseEntity<ApiResponse> addTrainee(@RequestBody AddTraineeRequest TraineeRequest) {
-        TraineeDTO traineeDTO = traineeService.addTrainee(TraineeRequest);
-        return ResponseEntity.ok(new ApiResponse("the trainee is created", traineeDTO));
-
+        try {
+            TraineeDTO traineeDTO = traineeService.addTrainee(TraineeRequest);
+            return ResponseEntity.ok(new ApiResponse("the trainee is created", traineeDTO));
+        } catch (ResourceFoundException e) {
+            return ResponseEntity.ok(new ApiResponse(e.getMessage(), null));
+        }
     }
 
     @PutMapping("/update-trainee")

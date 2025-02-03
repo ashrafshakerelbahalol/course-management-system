@@ -8,18 +8,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.global.coursemanagementsystem.entity.Trainee;
+import com.global.coursemanagementsystem.entity.Trainer;
+import com.global.coursemanagementsystem.error.ResourceFoundException;
 import com.global.coursemanagementsystem.mapstruct.dto.TraineeDTO;
 import com.global.coursemanagementsystem.mapstruct.dto.TraineeDTO;
 import com.global.coursemanagementsystem.mapstruct.mapper.TraineeMapper;
 import com.global.coursemanagementsystem.reppository.TraineeRepository;
 import com.global.coursemanagementsystem.request.AddTraineeRequest;
+
+import lombok.RequiredArgsConstructor;
+
 import com.global.coursemanagementsystem.request.AddTraineeRequest;
+
 @Service
+@RequiredArgsConstructor
 public class TraineeService {
 
-    @Autowired
+
     private TraineeRepository traineeRepository;
-    @Autowired
+
     private TraineeMapper traineeMapper;
 
     public List<TraineeDTO> getAllTrainees() {
@@ -38,17 +45,16 @@ public class TraineeService {
         return traineeDto;
     }
 
-    public  TraineeDTO addTrainee(AddTraineeRequest TraineeRequest) {
+    public TraineeDTO addTrainee(AddTraineeRequest TraineeRequest) {
         Trainee currentTrainee = traineeMapper.toEntity(TraineeRequest);
-        Trainee traineeHavingSameEmail =traineeRepository.findByEmail(currentTrainee.getEmail()).orElse(null);
-        if(traineeHavingSameEmail!=null) {
-            return null;
+        Trainee traineeHavingSameId = traineeRepository.findById(currentTrainee.getTraineeId()).orElse(null);
+        Trainee traineeHavingSameEmail = traineeRepository.findByEmail(currentTrainee.getEmail()).orElse(null);
+        if (traineeHavingSameEmail != null||traineeHavingSameId != null) {
+            throw new ResourceFoundException("Trainee with the same id or email already exists");
         }
         currentTrainee = traineeRepository.save(currentTrainee);
         return traineeMapper.toDTO(currentTrainee);
-     
 
-       
     }
 
     public TraineeDTO updateTrainee(TraineeDTO traineeDTO) {
@@ -64,16 +70,16 @@ public class TraineeService {
     }
 
     public TraineeDTO deleteTrainee(Long id) {
-      
+
         Optional<Trainee> trainee = traineeRepository.findById(id);
         Trainee TraineeToBeDeleted;
         if (trainee.isPresent()) {
-            TraineeToBeDeleted=trainee.get();
+            TraineeToBeDeleted = trainee.get();
             traineeRepository.delete(TraineeToBeDeleted);
         } else {
-            return null ;
+            return null;
         }
-        
+
         return traineeMapper.toDTO(TraineeToBeDeleted);
     }
 

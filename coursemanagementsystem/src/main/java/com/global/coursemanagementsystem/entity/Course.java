@@ -1,6 +1,7 @@
 package com.global.coursemanagementsystem.entity;
 
-import java.time.LocalDate;
+
+import java.time.LocalDateTime;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -24,5 +25,5 @@ public class Course {
     @Column(name = "course_name")
     private String courseName;
     private String description;
-    private LocalDate duration;
+    private LocalDateTime  duration;
 }

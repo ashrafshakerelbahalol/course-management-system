@@ -6,25 +6,24 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.global.coursemanagementsystem.entity.Course;
 import com.global.coursemanagementsystem.mapstruct.dto.CourseDTO;
-import com.global.coursemanagementsystem.mapstruct.dto.TrainerDTO;
 import com.global.coursemanagementsystem.request.AddCourseRequest;
 import com.global.coursemanagementsystem.response.ApiResponse;
 import com.global.coursemanagementsystem.service.CourseService;
 
+import lombok.RequiredArgsConstructor;
+
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 
 @RestController
 @RequestMapping("/course")
+@RequiredArgsConstructor
 public class CourseController {
-    @Autowired
     private CourseService courseService;
 
     @GetMapping("/get-all-courses")
@@ -45,7 +44,7 @@ public class CourseController {
         CourseDTO courseDTO =courseService.addCourse(CourseRequest); 
         return ResponseEntity.ok(new ApiResponse("the course is added now",courseDTO));
     }
-    
+
    
     
     
