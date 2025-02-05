@@ -11,6 +11,6 @@ import com.global.coursemanagementsystem.entity.TrainingSession;
 @Repository
 public interface TrainingSessionRepository extends JpaRepository<TrainingSession,Long>{
      @Query("Select e from TrainingSession e where e.course.courseId = :id")
-     List<Optional<TrainingSession>>  findSessionsById(Long id);
+     List<Optional<TrainingSession>>  findSessionsById(int id);
     
 }

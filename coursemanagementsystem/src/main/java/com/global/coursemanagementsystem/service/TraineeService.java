@@ -10,7 +10,9 @@ import org.springframework.stereotype.Service;
 import com.global.coursemanagementsystem.entity.Trainee;
 import com.global.coursemanagementsystem.entity.Trainer;
 import com.global.coursemanagementsystem.error.ResourceFoundException;
+import com.global.coursemanagementsystem.error.ResourceNotFoundException;
 import com.global.coursemanagementsystem.mapstruct.dto.TraineeDTO;
+import com.global.coursemanagementsystem.mapstruct.dto.TrainerDTO;
 import com.global.coursemanagementsystem.mapstruct.dto.TraineeDTO;
 import com.global.coursemanagementsystem.mapstruct.mapper.TraineeMapper;
 import com.global.coursemanagementsystem.reppository.TraineeRepository;
@@ -25,24 +27,30 @@ import com.global.coursemanagementsystem.request.AddTraineeRequest;
 public class TraineeService {
 
 
-    private TraineeRepository traineeRepository;
+    private final TraineeRepository traineeRepository;
 
-    private TraineeMapper traineeMapper;
+    private final TraineeMapper traineeMapper;
 
     public List<TraineeDTO> getAllTrainees() {
-        return traineeRepository.findAll().stream().map(traineeMapper::toDTO).collect(Collectors.toList());
+        List <Trainee> trainers = traineeRepository.findAll();
+        List <TraineeDTO> traineeDTO= trainers.stream().map(traineeMapper::toDTO).toList();
+        if(traineeDTO.isEmpty()) {
+            throw new ResourceNotFoundException("No trainees found");
+        }
+        
+        return traineeDTO;
 
     }
 
     public TraineeDTO getTraineeById(Long id) {
         Optional<Trainee> trainee = traineeRepository.findById(id);
-        TraineeDTO traineeDto;
+        TraineeDTO traineeDTO;
         if (trainee.isPresent()) {
-            traineeDto = traineeMapper.toDTO(trainee.get());
+            traineeDTO = traineeMapper.toDTO(trainee.get());
         } else {
-            traineeDto = null;
+          throw new ResourceNotFoundException("there is no trainee with id "+ id);
         }
-        return traineeDto;
+        return traineeDTO;
     }
 
     public TraineeDTO addTrainee(AddTraineeRequest TraineeRequest) {
@@ -77,7 +85,7 @@ public class TraineeService {
             TraineeToBeDeleted = trainee.get();
             traineeRepository.delete(TraineeToBeDeleted);
         } else {
-            return null;
+            throw new ResourceNotFoundException("Trainee with the id not found");
         }
 
         return traineeMapper.toDTO(TraineeToBeDeleted);

@@ -21,12 +21,18 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class TrainerService {
 
-    private TrainerRepository trainerRepository;
+    private final TrainerRepository trainerRepository;
 
-    private TrainerMapper trainerMapper;
+    private final TrainerMapper trainerMapper;
 
     public List<TrainerDTO> getAllTrainers() {
-        return trainerRepository.findAll().stream().map(trainerMapper::toDTO).collect(Collectors.toList());
+        List <Trainer> trainers = trainerRepository.findAll();
+        List <TrainerDTO> trainerDTO= trainers.stream().map(trainerMapper::toDTO).toList();
+        if(trainerDTO.isEmpty()) {
+            throw new ResourceNotFoundException("No trainers found");
+        }
+        
+        return trainerDTO;
 
     }
 
