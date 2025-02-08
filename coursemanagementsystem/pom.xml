@@ -32,6 +32,12 @@
 		<mapstruct.version>1.5.5.Final</mapstruct.version> <!-- MapStruct version -->
 	</properties>
 	<dependencies>
+
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+
 		<!-- Spring Boot Starters -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

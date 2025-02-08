@@ -3,6 +3,7 @@ package com.global.coursemanagementsystem.controller;
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -14,7 +15,9 @@ import org.springframework.web.bind.annotation.RestController;
 import com.global.coursemanagementsystem.error.ResourceFoundException;
 import com.global.coursemanagementsystem.error.ResourceNotFoundException;
 import com.global.coursemanagementsystem.mapstruct.dto.EnrollmentDTO;
+import com.global.coursemanagementsystem.mapstruct.dto.EnrollmentDTO;
 import com.global.coursemanagementsystem.mapstruct.dto.SessionEnrollmentDTO;
+import com.global.coursemanagementsystem.mapstruct.dto.TrainerDTO;
 import com.global.coursemanagementsystem.request.AddEnrollmentRequest;
 import com.global.coursemanagementsystem.response.ApiResponse;
 import com.global.coursemanagementsystem.service.EnrollmentService;
@@ -28,12 +31,12 @@ public class EnrollmentController {
     private final EnrollmentService enrollmentService;
 
     @GetMapping("/get-all-enrollments")
-    public ResponseEntity<ApiResponse> getMethodName() {
+    public ResponseEntity<ApiResponse> getAllEnrollments() {
         try {
             List<EnrollmentDTO> EnrollmentDTOs = enrollmentService.getAllEnrollments();
             return ResponseEntity.ok(new ApiResponse("get all the the enrollments", EnrollmentDTOs));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(204).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(400).body(new ApiResponse(e.getMessage(), null));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
 
@@ -67,6 +70,18 @@ public class EnrollmentController {
         try {
             EnrollmentDTO EnrollmentDTO = enrollmentService.updateEnrollment(enrollmentDTO);
             return ResponseEntity.ok(new ApiResponse("update enrollment", EnrollmentDTO));
+        } catch (ResourceNotFoundException e) {
+            return ResponseEntity.status(400).body(new ApiResponse(e.getMessage(), null));
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
+        }
+    }
+
+    @DeleteMapping("delete-enrollment/{id}")
+    public ResponseEntity<ApiResponse> deleteEnrollment(@PathVariable Long id) {
+        try {
+             enrollmentService.deleteEnrollment(id);
+            return ResponseEntity.ok(new ApiResponse("The Enrollment is deleted",id));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(400).body(new ApiResponse(e.getMessage(), null));
         } catch (RuntimeException e) {

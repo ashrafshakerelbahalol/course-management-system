@@ -55,9 +55,8 @@ public class TraineeService {
 
     public TraineeDTO addTrainee(AddTraineeRequest TraineeRequest) {
         Trainee currentTrainee = traineeMapper.toEntity(TraineeRequest);
-        Trainee traineeHavingSameId = traineeRepository.findById(currentTrainee.getTraineeId()).orElse(null);
         Trainee traineeHavingSameEmail = traineeRepository.findByEmail(currentTrainee.getEmail()).orElse(null);
-        if (traineeHavingSameEmail != null||traineeHavingSameId != null) {
+        if (traineeHavingSameEmail != null) {
             throw new ResourceFoundException("Trainee with the same id or email already exists");
         }
         currentTrainee = traineeRepository.save(currentTrainee);

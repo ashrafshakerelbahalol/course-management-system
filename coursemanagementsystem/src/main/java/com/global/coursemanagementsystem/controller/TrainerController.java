@@ -2,12 +2,9 @@ package com.global.coursemanagementsystem.controller;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.global.coursemanagementsystem.entity.Trainer;
 import com.global.coursemanagementsystem.error.ResourceFoundException;
 import com.global.coursemanagementsystem.error.ResourceNotFoundException;
 import com.global.coursemanagementsystem.mapstruct.dto.TrainerDTO;
@@ -21,7 +18,6 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -39,7 +35,7 @@ public class TrainerController {
             List<TrainerDTO> trainers = trainerService.getAllTrainers();
             return ResponseEntity.ok(new ApiResponse("get all the trainers", trainers));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(204).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(404).body(new ApiResponse(e.getMessage(), null));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
         }
@@ -51,7 +47,7 @@ public class TrainerController {
             TrainerDTO trainer = trainerService.getTrainerById(id);
             return ResponseEntity.ok(new ApiResponse("the trainer is found", trainer));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(204).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(404).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
         }

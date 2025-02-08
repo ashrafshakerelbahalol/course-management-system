@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TrainingSessionDTO {
+    private Long sessionId;
     private String courseName;
     private String trainerName;
     private LocalTime startTime;

@@ -1,5 +1,9 @@
 package com.global.coursemanagementsystem.request;
 
-public class AddEnrollmentRequest {
+import com.global.coursemanagementsystem.entity.Trainee;
+import com.global.coursemanagementsystem.entity.TrainingSession;
 
+public class AddEnrollmentRequest {
+    private TrainingSession trainingSession;
+    private Trainee trainee;
 }

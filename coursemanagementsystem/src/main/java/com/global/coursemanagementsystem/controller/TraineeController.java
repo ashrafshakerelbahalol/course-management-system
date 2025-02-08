@@ -34,7 +34,7 @@ public class TraineeController {
             List<TraineeDTO> trainees = traineeService.getAllTrainees();
             return ResponseEntity.ok(new ApiResponse("get all the trainees", trainees));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(204).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(404).body(new ApiResponse(e.getMessage(), null));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
         }
@@ -46,7 +46,7 @@ public class TraineeController {
             TraineeDTO trainee = traineeService.getTraineeById(id);
             return ResponseEntity.ok(new ApiResponse("the trainee is found", trainee));
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(204).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(404).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
             return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
         }

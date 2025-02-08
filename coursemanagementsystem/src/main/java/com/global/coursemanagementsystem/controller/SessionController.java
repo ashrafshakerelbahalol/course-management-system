@@ -31,12 +31,12 @@ public class SessionController {
   private final SessionService sessionService;
 
   @GetMapping("/get-all-sessions")
-  public ResponseEntity<ApiResponse> getMethodName() {
+  public ResponseEntity<ApiResponse> getAllSessions() {
     try {
       List<TrainingSessionDTO> trainingSessionDTOs = sessionService.getAllSessions();
       return ResponseEntity.ok(new ApiResponse("get all the the sessions", trainingSessionDTOs));
     } catch (ResourceNotFoundException e) {
-      return ResponseEntity.status(204).body(new ApiResponse(e.getMessage(), null));
+      return ResponseEntity.status(404).body(new ApiResponse(e.getMessage(), null));
     } catch (RuntimeException e) {
       return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
 
@@ -50,6 +50,8 @@ public class SessionController {
       return ResponseEntity.ok(new ApiResponse("get all the sessions with course", courseSessionDTO));
     } catch (ResourceNotFoundException e) {
       return ResponseEntity.status(404).body(new ApiResponse(e.getMessage(), null));
+    }catch (RuntimeException e) {
+      return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
     }
   }
 
@@ -58,9 +60,7 @@ public class SessionController {
     try {
       TrainingSessionDTO trainingSessionDTO = sessionService.addSession(sessionRequest);
       return ResponseEntity.ok(new ApiResponse("add session to a course", trainingSessionDTO));
-    } catch (ResourceFoundException e) {
-      return ResponseEntity.status(400).body(new ApiResponse(e.getMessage(), null));
-    } catch (RuntimeException e) {
+    }  catch (RuntimeException e) {
       return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
     }
   }

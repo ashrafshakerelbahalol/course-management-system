@@ -35,7 +35,7 @@ public class CourseController {
             return ResponseEntity.ok(new ApiResponse("get all the courses", courses));
 
         } catch (ResourceNotFoundException e) {
-            return ResponseEntity.status(204).body(new ApiResponse(e.getMessage(), null));
+            return ResponseEntity.status(404).body(new ApiResponse(e.getMessage(), null));
         } catch (RuntimeException e) {
             return ResponseEntity.status(500).body(new ApiResponse(e.getMessage(), null));
         }

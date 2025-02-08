@@ -1,7 +1,11 @@
 package com.global.coursemanagementsystem.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,9 +21,11 @@ import lombok.Setter;
 @Setter
 public class Assessment {
     @Id
+    @GeneratedValue (strategy = GenerationType.IDENTITY)
     private Long assessmentId;
-    @OneToOne
-    private Enrollement enrollement;
+    @ManyToOne
+    @JoinColumn(name="enrollment_id")
+    private Enrollment enrollment;
     private byte score;
     private String feedback;
 }

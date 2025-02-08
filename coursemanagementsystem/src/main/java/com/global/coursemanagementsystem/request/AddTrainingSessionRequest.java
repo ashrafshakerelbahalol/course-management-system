@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddTrainingSessionRequest {
-    private Long sessionId;
     private Course course;
     private Trainer trainer;
     private LocalTime startTime;
