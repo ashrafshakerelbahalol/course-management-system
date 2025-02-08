@@ -1,5 +1,6 @@
 package com.global.coursemanagementsystem.mapstruct.dto;
 
+import com.global.coursemanagementsystem.entity.Trainee;
 import com.global.coursemanagementsystem.entity.TrainingSession;
 
 import lombok.AllArgsConstructor;

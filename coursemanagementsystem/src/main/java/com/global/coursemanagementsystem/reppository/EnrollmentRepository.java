@@ -8,7 +8,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import com.global.coursemanagementsystem.entity.Enrollment;
-import com.global.coursemanagementsystem.mapstruct.dto.SessionEnrollmentDTO;
 @Repository
 public interface EnrollmentRepository extends JpaRepository<Enrollment,Long>{
     @Query("SELECT e FROM Enrollment e WHERE e.trainingSession.sessionId = :sessionId AND e.trainee.traineeId = :traineeId")

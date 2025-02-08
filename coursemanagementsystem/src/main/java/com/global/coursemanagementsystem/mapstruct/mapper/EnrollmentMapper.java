@@ -17,7 +17,7 @@ public interface EnrollmentMapper {
   EnrollmentMapper INSTANCE = Mappers.getMapper(EnrollmentMapper.class);
 
   @Mapping(target =   "trainingSessionId", source  = "enrollment.trainingSession.sessionId")
-  @Mapping(target = "traineeName", expression = "java(combineNames(enrollment.getTrainee().getFirstName(),enrollment.getTrainee().getLastName()))")
+ @Mapping(target = "traineeName", expression = "java(combineNames(enrollment.getTrainee().getFirstName(),enrollment.getTrainee().getLastName()))")
   EnrollmentDTO toDTO(Enrollment enrollment);
   
   @Mapping(target = "trainee.firstName", expression = "java(getFirstName(enrollmentDTO.getTraineeName()))")

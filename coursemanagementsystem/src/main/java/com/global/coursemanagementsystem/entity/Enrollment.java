@@ -21,7 +21,7 @@ import lombok.Setter;
 @Setter
 public class Enrollment {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "enrollment_id")
     private Long enrollmentId;
     @ManyToOne
