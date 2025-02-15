@@ -20,7 +20,7 @@ The **Course Management System** is a backend application designed to **streamli
 - **APIs**: RESTful APIs
 - **Testing**: JUnit
   
-🎯 Next Steps
+## 🎯 Next Steps
 - 📌 Add Swagger Documentation for API testing.
 - 📌 Deploy the project on AWS, Heroku, or Render.
 - 📌 Implement JWT Authentication & Role-based Access Control.
