@@ -19,10 +19,13 @@ The **Course Management System** is a backend application designed to **streamli
 - **Database**: MySQL
 - **APIs**: RESTful APIs
 - **Testing**: JUnit
+  
 🎯 Next Steps
-📌 Add Swagger Documentation for API testing.
-📌 Deploy the project on AWS, Heroku, or Render.
-📌 Implement JWT Authentication & Role-based Access Control.
-🚀 Feel free to fork, contribute, or report issues!
+- 📌 Add Swagger Documentation for API testing.
+- 📌 Deploy the project on AWS, Heroku, or Render.
+- 📌 Implement JWT Authentication & Role-based Access Control.
+- 🚀 Feel free to fork, contribute, or report issues!
+  
 👨‍💻 Developed by Ashraf Shaker El Bahlol
+
 🔗 GitHub Repo: Course Management System
