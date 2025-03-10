@@ -7,11 +7,13 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.global.coursemanagementsystem.entity.Trainee;
 import com.global.coursemanagementsystem.reppository.TraineeRepository;
 
 @DataJpaTest
+@ActiveProfiles("test")
 public class TraineeRepositoryTest {
     @Autowired
     private TraineeRepository traineeRepository;
@@ -25,7 +27,7 @@ public class TraineeRepositoryTest {
     void ItShouldCheckEmailExists() {
         // Given
         String email = "ashrafshaker@gmail.com";
-        Trainee trainee = Trainee.builder().firstName("ashraf").email(email).traineeId(123L).
+        Trainee trainee = Trainee.builder().firstName("ashraf").lastName("ashraf").email(email).
         lastName("shaker").build();
         traineeRepository.save(trainee);
         // When

@@ -7,14 +7,18 @@ import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.context.ActiveProfiles;
 
 import com.global.coursemanagementsystem.entity.Trainee;
+import com.global.coursemanagementsystem.entity.Trainer;
 import com.global.coursemanagementsystem.reppository.TraineeRepository;
+import com.global.coursemanagementsystem.reppository.TrainerRepository;
 
 @DataJpaTest
+@ActiveProfiles("test")
 public class TrainerRepositoryTest {
     @Autowired
-    private TraineeRepository trainerRepository;
+    private TrainerRepository trainerRepository;
     @AfterEach
     void tearDown() {
         trainerRepository.deleteAll();
@@ -25,9 +29,9 @@ public class TrainerRepositoryTest {
     void ItShouldCheckEmailExists() {
         // Given
         String email = "ashrafshaker@gmail.com";
-        Trainee trainee = Trainee.builder().firstName("ashraf").email(email).traineeId(123L).
+        Trainer trainer = Trainer.builder().firstName("ashraf").email(email).trainerId(123).
         lastName("shaker").build();
-        trainerRepository.save(trainee);
+        trainerRepository.save(trainer);
         // When
         boolean expected = trainerRepository.findByEmail(email).isPresent();
         // Then

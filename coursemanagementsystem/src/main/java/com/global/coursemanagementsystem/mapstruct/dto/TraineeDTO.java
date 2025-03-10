@@ -1,12 +1,14 @@
 package com.global.coursemanagementsystem.mapstruct.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class TraineeDTO {
     private Long traineeId;
     private String firstName;
