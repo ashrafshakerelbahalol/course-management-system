@@ -20,6 +20,7 @@ import com.global.coursemanagementsystem.request.AddTraineeRequest;
 import com.global.coursemanagementsystem.response.ApiResponse;
 import com.global.coursemanagementsystem.service.TraineeService;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -54,7 +55,7 @@ public class TraineeController {
     }
 
     @PostMapping("/add-trainee")
-    public ResponseEntity<ApiResponse> addTrainee(@RequestBody AddTraineeRequest TraineeRequest) {
+    public ResponseEntity<ApiResponse> addTrainee(@RequestBody @Valid AddTraineeRequest TraineeRequest) {
         try {
             TraineeDTO traineeDTO = traineeService.addTrainee(TraineeRequest);
             return ResponseEntity.ok(new ApiResponse("the trainee is added now", traineeDTO));

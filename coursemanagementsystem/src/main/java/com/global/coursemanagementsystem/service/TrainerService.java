@@ -2,9 +2,11 @@ package com.global.coursemanagementsystem.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.global.coursemanagementsystem.entity.Trainer;
@@ -25,11 +27,12 @@ public class TrainerService {
 
     private final TrainerMapper trainerMapper;
 
-    public List<TrainerDTO> getAllTrainers() {
-        List <Trainer> trainers = trainerRepository.findAll();
+    public List<TrainerDTO> getAllTrainers(int page, int size) {
+        Pageable pageable = PageRequest.of(page,size);
+        Page<Trainer> trainers =  trainerRepository.findAll(pageable);
         List <TrainerDTO> trainerDTO= trainers.stream().map(trainerMapper::toDTO).toList();
         if(trainerDTO.isEmpty()) {
-            throw new ResourceNotFoundException("No trainers found");
+            throw new ResourceNotFoundException("No trainers is found");
         }
         
         return trainerDTO;
@@ -42,7 +45,7 @@ public class TrainerService {
         if (trainer.isPresent()) {
             trainerDto = trainerMapper.toDTO(trainer.get());
         } else {
-            throw new ResourceNotFoundException("Trainer with the id not found");
+            throw new ResourceNotFoundException("Trainer with the id: "+id+" is not found");
         }
         return trainerDto;
     }
@@ -63,14 +66,11 @@ public class TrainerService {
 
     public TrainerDTO updateTrainer(TrainerDTO trainerDTO) {
         Trainer trainer = trainerMapper.toEntity(trainerDTO);
-        TrainerDTO currentTrainer = getTrainerById(trainer.getTrainerId());
-        currentTrainer.setLastName(trainer.getLastName());
-        currentTrainer.setEmail(trainer.getEmail());
-        currentTrainer.setTrainerId(trainer.getTrainerId());
-        currentTrainer.setFirstName(trainer.getFirstName());
-        trainer = trainerMapper.toEntity(trainerDTO);
-        trainer = trainerRepository.save(trainer);
-        return trainerMapper.toDTO(trainer);
+        Trainer currentTrainer = trainerRepository.findById(trainer.getTrainerId()).orElseThrow
+                (()-> new ResourceNotFoundException("Trainer with the id: "+trainerDTO.getTrainerId()+" is not found"));
+        BeanUtils.copyProperties(trainer, currentTrainer, "trainerId","createdAt", "createdBy", "updatedAt", "updatedBy");
+        currentTrainer = trainerRepository.save(currentTrainer);
+        return trainerMapper.toDTO(currentTrainer);
     }
 
     public TrainerDTO deleteTrainer(Integer id) {

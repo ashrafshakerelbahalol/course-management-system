@@ -2,8 +2,9 @@ package com.global.coursemanagementsystem.controller;
 
 import java.util.List;
 
+import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import com.global.coursemanagementsystem.error.ResourceFoundException;
 import com.global.coursemanagementsystem.error.ResourceNotFoundException;
@@ -14,14 +15,6 @@ import com.global.coursemanagementsystem.service.TrainerService;
 
 import lombok.RequiredArgsConstructor;
 
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-
 @RestController
 @RequestMapping("/trainer")
 @RequiredArgsConstructor
@@ -29,11 +22,12 @@ public class TrainerController {
 
     private final TrainerService trainerService;
 
-    @GetMapping("/get-all-trainers")
-    public ResponseEntity<ApiResponse> getAllTrainers() {
+    @GetMapping("")
+    public ResponseEntity<ApiResponse> getAllTrainers(@RequestParam(defaultValue = "0") int page,
+                                                      @RequestParam(defaultValue = "10") int size) {
         try {
-            List<TrainerDTO> trainers = trainerService.getAllTrainers();
-            return ResponseEntity.ok(new ApiResponse("get all the trainers", trainers));
+            List<TrainerDTO> trainers = trainerService.getAllTrainers(page,size);
+            return ResponseEntity.ok(new ApiResponse("Getting all the trainers with the page number " + page + "and size "+ size, trainers));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(404).body(new ApiResponse(e.getMessage(), null));
         } catch (RuntimeException e) {
@@ -41,11 +35,11 @@ public class TrainerController {
         }
     }
 
-    @GetMapping("/get-by-id/{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<ApiResponse> getTrainerById(@PathVariable Integer id) {
         try {
             TrainerDTO trainer = trainerService.getTrainerById(id);
-            return ResponseEntity.ok(new ApiResponse("the trainer is found", trainer));
+            return ResponseEntity.ok(new ApiResponse("The trainer is found", trainer));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(404).body(new ApiResponse(e.getMessage(), null));
         } catch (Exception e) {
@@ -54,11 +48,11 @@ public class TrainerController {
 
     }
 
-    @PostMapping("/add-trainer")
-    public ResponseEntity<ApiResponse> addTrainer(@RequestBody AddTrainerRequest TrainerRequest) {
+    @PostMapping()
+    public ResponseEntity<ApiResponse> addTrainer(@RequestBody @Valid AddTrainerRequest TrainerRequest) {
         try {
             TrainerDTO trainerDTO = trainerService.addTrainer(TrainerRequest);
-            return ResponseEntity.status(201).body(new ApiResponse("the trainer is added now", trainerDTO));
+            return ResponseEntity.status(201).body(new ApiResponse("The trainer is added now", trainerDTO));
         } catch (ResourceFoundException e) {
             return ResponseEntity.status(400).body(new ApiResponse(e.getMessage(), null));
         } catch (RuntimeException e) {
@@ -66,11 +60,11 @@ public class TrainerController {
         }
     }
 
-    @PutMapping("/update-trainer")
+    @PutMapping("")
     public ResponseEntity<ApiResponse> updateTrainer(@RequestBody TrainerDTO trainerDTO) {
         try {
             TrainerDTO trainer = trainerService.updateTrainer(trainerDTO);
-            return ResponseEntity.ok(new ApiResponse("the trainer is updated", trainer));
+            return ResponseEntity.ok(new ApiResponse("The trainer is updated", trainer));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(400).body(new ApiResponse(e.getMessage(), null));
         } catch (RuntimeException e) {
@@ -78,11 +72,11 @@ public class TrainerController {
         }
     }
 
-    @DeleteMapping("/delete-trainer/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<ApiResponse> deleteTrainer(@PathVariable Integer id) {
         try {
             TrainerDTO trainer = trainerService.deleteTrainer(id);
-            return ResponseEntity.ok(new ApiResponse("the trainer is deleted", trainer));
+            return ResponseEntity.ok(new ApiResponse("The trainer is deleted", trainer));
         } catch (ResourceNotFoundException e) {
             return ResponseEntity.status(400).body(new ApiResponse(e.getMessage(), null));
         } catch (RuntimeException e) {

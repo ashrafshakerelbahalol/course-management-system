@@ -2,9 +2,11 @@ package com.global.coursemanagementsystem.service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.BeanUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.global.coursemanagementsystem.entity.Course;
@@ -24,11 +26,12 @@ public class CourseService {
     private final CourseRepository courseRepository;
     private final CourseMapper courseMapper;
 
-    public List<CourseDTO> getAllCourses() {
-        List<Course> courses = courseRepository.findAll();
+    public List<CourseDTO> getAllCourses(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Course> courses =  courseRepository.findAll(pageable);
         List<CourseDTO> courseDTOs = courses.stream().map(courseMapper::toDTO).toList();
         if (courseDTOs.isEmpty())
-            throw new ResourceNotFoundException("there is no courses added");
+            throw new ResourceNotFoundException("There is no courses added");
         return courseDTOs;
 
     }
@@ -39,7 +42,7 @@ public class CourseService {
         if (courseTobeFound.isPresent())
             courseDTO = courseMapper.toDTO(courseTobeFound.get());
         else
-            throw new ResourceNotFoundException("there is no course with id " + id);
+            throw new ResourceNotFoundException("There is no course with id " + id);
         return courseDTO;
 
     }
@@ -48,7 +51,7 @@ public class CourseService {
         Course courseToSaved = courseMapper.toEntity(CourseRequest);
         Optional<Course> courseWithSameId = courseRepository.findById(courseToSaved.getCourseId());
         if (courseWithSameId.isPresent())
-            throw new ResourceFoundException("there is a course with the same id");
+            throw new ResourceFoundException("There is a course with the same id");
         courseToSaved = courseRepository.save(courseToSaved);
         CourseDTO courseDTO = courseMapper.toDTO(courseToSaved);
         return courseDTO;
@@ -56,13 +59,18 @@ public class CourseService {
     }
 
     public CourseDTO updateCourse(CourseDTO courseDTO) {
-        Course courseToUpdated = courseMapper.toEntity(courseDTO);
-        Optional<Course> courseWithSameId = courseRepository.findById(courseToUpdated.getCourseId());
-        if (courseWithSameId.isEmpty())
-            throw new ResourceNotFoundException("there is no course with the same id");
-        courseToUpdated = courseRepository.save(courseToUpdated);
-        courseDTO = courseMapper.toDTO(courseToUpdated);
+        Course courseWithUpdatedData = courseMapper.toEntity(courseDTO);
+        Course courseWithSameId = courseRepository.findById(courseWithUpdatedData.getCourseId())
+                .orElseThrow(()->new ResourceNotFoundException("There is no such course with the that id"));
+        BeanUtils.copyProperties(courseWithUpdatedData, courseWithSameId, "courseId", "createdAt", "createdBy", "updatedAt", "updatedBy");
+        courseWithUpdatedData = courseRepository.save(courseWithUpdatedData);
+        courseDTO = courseMapper.toDTO(courseWithUpdatedData);
         return courseDTO;
     }
 
+    public void deleteCourse(int courseId) {
+        courseRepository.findById(courseId)
+                .orElseThrow(()->new ResourceNotFoundException("There is no such course with the that id"));
+        courseRepository.deleteById(courseId);
+    }
 }

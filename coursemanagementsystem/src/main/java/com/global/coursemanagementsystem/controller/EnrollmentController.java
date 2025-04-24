@@ -14,11 +14,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.global.coursemanagementsystem.error.ResourceFoundException;
 import com.global.coursemanagementsystem.error.ResourceNotFoundException;
-import com.global.coursemanagementsystem.mapstruct.dto.EnrollmentDTO;
-import com.global.coursemanagementsystem.mapstruct.dto.EnrollmentDTO;
 import com.global.coursemanagementsystem.mapstruct.dto.SessionEnrollmentDTO;
-import com.global.coursemanagementsystem.mapstruct.dto.TrainerDTO;
 import com.global.coursemanagementsystem.request.AddEnrollmentRequest;
+import com.global.coursemanagementsystem.mapstruct.dto.*;
 import com.global.coursemanagementsystem.response.ApiResponse;
 import com.global.coursemanagementsystem.service.EnrollmentService;
 

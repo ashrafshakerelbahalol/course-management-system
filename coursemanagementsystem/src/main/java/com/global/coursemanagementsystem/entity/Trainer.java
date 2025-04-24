@@ -3,6 +3,7 @@ package com.global.coursemanagementsystem.entity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Email;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -26,6 +27,7 @@ public class Trainer {
     @Column(name = "last_name", nullable = false)
     private String lastName;
     @Column(nullable = false)
+    @Email
     private String email;
     private String expertise;
 }
